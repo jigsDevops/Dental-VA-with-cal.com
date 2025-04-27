@@ -1,0 +1,372 @@
+{
+  "name": "Healthcare Appointment System Integration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "healthcare-webhook",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.eventType}}",
+              "operation": "equal",
+              "value2": "incomingCall"
+            }
+          ]
+        }
+      },
+      "name": "Incoming Call",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.eventType}}",
+              "operation": "equal",
+              "value2": "outboundCall"
+            }
+          ]
+        }
+      },
+      "name": "Outbound Call",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 450]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.eventType}}",
+              "operation": "equal",
+              "value2": "callStatusUpdate"
+            }
+          ]
+        }
+      },
+      "name": "Call Status Update",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 600]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.eventType}}",
+              "operation": "equal",
+              "value2": "emailReminderSent"
+            }
+          ]
+        }
+      },
+      "name": "Email Reminder",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 750]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrCreate",
+        "file": "/data/call_logs.json",
+        "options": {}
+      },
+      "name": "Log Incoming Call",
+      "type": "n8n-nodes-base.writeJsonFile",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrCreate",
+        "file": "/data/outbound_call_logs.json",
+        "options": {}
+      },
+      "name": "Log Outbound Call",
+      "type": "n8n-nodes-base.writeJsonFile",
+      "typeVersion": 1,
+      "position": [650, 450]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "file": "/data/call_status_logs.json",
+        "options": {}
+      },
+      "name": "Update Call Status",
+      "type": "n8n-nodes-base.writeJsonFile",
+      "typeVersion": 1,
+      "position": [650, 600]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrCreate",
+        "file": "/data/email_logs.json",
+        "options": {}
+      },
+      "name": "Log Email Reminder",
+      "type": "n8n-nodes-base.writeJsonFile",
+      "typeVersion": 1,
+      "position": [650, 750]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "eventType",
+              "value": "={{$json.eventType}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.data.timestamp}}"
+            },
+            {
+              "name": "callerNumber",
+              "value": "={{$json.data.callerNumber}}"
+            },
+            {
+              "name": "callSid",
+              "value": "={{$json.data.callSid}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Incoming Call Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [550, 300]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "eventType",
+              "value": "={{$json.eventType}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.data.timestamp}}"
+            },
+            {
+              "name": "appointmentId",
+              "value": "={{$json.data.appointmentId}}"
+            },
+            {
+              "name": "patientPhone",
+              "value": "={{$json.data.patientPhone}}"
+            },
+            {
+              "name": "callSid",
+              "value": "={{$json.data.callSid}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Outbound Call Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [550, 450]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "eventType",
+              "value": "={{$json.eventType}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.data.timestamp}}"
+            },
+            {
+              "name": "callSid",
+              "value": "={{$json.data.callSid}}"
+            },
+            {
+              "name": "callStatus",
+              "value": "={{$json.data.callStatus}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Call Status Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [550, 600]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "eventType",
+              "value": "={{$json.eventType}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.data.timestamp}}"
+            },
+            {
+              "name": "appointmentId",
+              "value": "={{$json.data.appointmentId}}"
+            },
+            {
+              "name": "patientEmail",
+              "value": "={{$json.data.patientEmail}}"
+            },
+            {
+              "name": "success",
+              "value": "={{$json.data.success}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Email Reminder Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [550, 750]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Incoming Call",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Outbound Call",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call Status Update",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Incoming Call": {
+      "true": [
+        [
+          {
+            "node": "Format Incoming Call Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outbound Call": {
+      "true": [
+        [
+          {
+            "node": "Format Outbound Call Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Status Update": {
+      "true": [
+        [
+          {
+            "node": "Format Call Status Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Reminder": {
+      "true": [
+        [
+          {
+            "node": "Format Email Reminder Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Incoming Call Data": {
+      "main": [
+        [
+          {
+            "node": "Log Incoming Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Outbound Call Data": {
+      "main": [
+        [
+          {
+            "node": "Log Outbound Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Call Status Data": {
+      "main": [
+        [
+          {
+            "node": "Update Call Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Email Reminder Data": {
+      "main": [
+        [
+          {
+            "node": "Log Email Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

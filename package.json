@@ -1,0 +1,32 @@
+{
+  "name": "healthcare-appointment-system",
+  "version": "1.0.0",
+  "description": "Healthcare appointment management system with Ultravox and Twilio",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node setup.js"
+  },
+  "keywords": [
+    "twilio",
+    "ultravox",
+    "voice",
+    "ai",
+    "healthcare",
+    "appointments",
+    "cal.com",
+    "n8n"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "twilio": "^5.2.2",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2",
+    "googleapis": "^133.0.0",
+    "winston": "^3.11.0"
+  }
+}

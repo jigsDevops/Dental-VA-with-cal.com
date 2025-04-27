@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Appointment System - Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 2px solid #3498db;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .log-entry {
+            background-color: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <h1>Healthcare Appointment System - Admin Panel</h1>
+    
+    <div class="tabs">
+        <div class="tab active" data-tab="settings">Settings</div>
+        <div class="tab" data-tab="call-logs">Call Logs</div>
+        <div class="tab" data-tab="email-logs">Email Logs</div>
+        <div class="tab" data-tab="system-logs">System Logs</div>
+    </div>
+    
+    <div id="settings" class="tab-content active">
+        <div class="container">
+            <h2>Reminder Settings</h2>
+            <form id="reminderSettingsForm">
+                <div class="form-group">
+                    <label for="reminderHoursBefore">Hours Before Appointment to Send Reminder:</label>
+                    <input type="number" id="reminderHoursBefore" name="reminderHoursBefore" min="1" max="72" value="24">
+                </div>
+                <div class="form-group">
+                    <label for="outboundCallTime">Time to Make Outbound Calls:</label>
+                    <input type="time" id="outboundCallTime" name="outboundCallTime" value="09:00">
+                </div>
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="call-logs" class="tab-content">
+        <div class="container">
+            <h2>Call Logs</h2>
+            <div class="form-group">
+                <label for="callLogFilter">Filter by:</label>
+                <select id="callLogFilter">
+                    <option value="all">All Calls</option>
+                    <option value="incoming">Incoming Calls</option>
+                    <option value="outbound">Outbound Calls</option>
+                </select>
+            </div>
+            <div id="callLogEntries">
+                <!-- Call logs will be populated here -->
+                <div class="log-entry">
+                    <span class="status status-success">Completed</span>
+                    <strong>Incoming Call</strong> from +1234567890 at 2023-06-15 10:30:45
+                    <div>Duration: 3m 45s</div>
+                    <div>Call SID: CA123456789012345678901234567890</div>
+                </div>
+                <div class="log-entry">
+                    <span class="status status-info">Reminder</span>
+                    <strong>Outbound Call</strong> to +1987654321 at 2023-06-15 09:15:20
+                    <div>Appointment ID: APT123456</div>
+                    <div>Call SID: CA098765432109876543210987654321</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="email-logs" class="tab-content">
+        <div class="container">
+            <h2>Email Logs</h2>
+            <div id="emailLogEntries">
+                <!-- Email logs will be populated here -->
+                <div class="log-entry">
+                    <span class="status status-success">Sent</span>
+                    <strong>Appointment Reminder</strong> to patient@example.com at 2023-06-15 07:00:12
+                    <div>Appointment ID: APT123456</div>
+                </div>
+                <div class="log-entry">
+                    <span class="status status-error">Failed</span>
+                    <strong>Appointment Reminder</strong> to invalid@example.com at 2023-06-15 07:00:15
+                    <div>Appointment ID: APT789012</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="system-logs" class="tab-content">
+        <div class="container">
+            <h2>System Logs</h2>
+            <div class="form-group">
+                <label for="logLevel">Log Level:</label>
+                <select id="logLevel">
+                    <option value="all">All Levels</option>
+                    <option value="info">Info</option>
+                    <option value="error">Error</option>
+                    <option value="warn">Warning</option>
+                </select>
+            </div>
+            <div id="systemLogEntries">
+                <!-- System logs will be populated here -->
+                <div class="log-entry">
+                    <span class="status status-info">INFO</span>
+                    <strong>2023-06-15 08:00:00</strong> - Server started on port 3000
+                </div>
+                <div class="log-entry">
+                    <span class="status status-info">INFO</span>
+                    <strong>2023-06-15 08:01:15</strong> - Running scheduled task: Send email reminders
+                </div>
+                <div class="log-entry">
+                    <span class="status status-error">ERROR</span>
+                    <strong>2023-06-15 08:15:30</strong> - Error connecting to Cal.com API: Rate limit exceeded
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include admin.js script -->
+    <script src="/js/admin.js"></script>
+    
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Form submission for reminder settings
+        document.getElementById('reminderSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const reminderHoursBefore = document.getElementById('reminderHoursBefore').value;
+            const outboundCallTime = document.getElementById('outboundCallTime').value;
+            
+            try {
+                const response = await fetch('/admin/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        reminderHoursBefore: parseInt(reminderHoursBefore),
+                        outboundCallTime
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Settings updated successfully!');
+                } else {
+                    alert('Error updating settings: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error updating settings: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
